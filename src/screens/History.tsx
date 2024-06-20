@@ -1,4 +1,5 @@
 import { HistoryCard } from '@components/HistoryCard'
+import { Loading } from '@components/Loading'
 import { ScreenHeader } from '@components/ScreenHeader'
 import { HistoryByDayDTO } from '@dtos/HistoryByDayDTO'
 import { useFocusEffect } from '@react-navigation/native'
@@ -48,14 +49,15 @@ export function History() {
   )
 
   return (
-    <VStack flex={1}>
+    <VStack width="100%" height="100%">
       <ScreenHeader title="Histórico de Exercícios" />
 
-      <ScrollView>
+      {isLoading ? (
+        <Loading />
+      ) : (
         <SectionList
           sections={exercises}
           keyExtractor={item => item.id}
-          renderItem={({ item }) => <HistoryCard data={item} />}
           renderSectionHeader={({ section }) => (
             <Heading
               color="gray.200"
@@ -67,9 +69,10 @@ export function History() {
               {section.title}
             </Heading>
           )}
+          renderItem={({ item }) => <HistoryCard data={item} />}
           px={8}
           contentContainerStyle={
-            [].length === 0 && { flex: 1, justifyContent: 'center' }
+            [].length === 0 && { justifyContent: 'center' }
           }
           ListEmptyComponent={() => (
             <Text color="gray.100" textAlign="center">
@@ -79,7 +82,7 @@ export function History() {
           )}
           showsVerticalScrollIndicator={false}
         />
-      </ScrollView>
+      )}
     </VStack>
   )
 }
